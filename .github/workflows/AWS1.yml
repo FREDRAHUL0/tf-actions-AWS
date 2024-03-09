@@ -1,0 +1,36 @@
+name: "tf-workflow" 
+on: 
+  workflow_dispatch: 
+jobs:    
+  tfrun: 
+    runs-on: ubuntu-latest
+    name: "terraform run" 
+    steps: 
+      - name: checkout 
+        uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v3
+        name: "Setup Terraform cli"    
+        with:
+            terraform_version: "1.7.4"
+            cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: 'Terraform Init'
+        working-directory: mod1 
+        run: | 
+          terraform init 
+      - name: 'Terraform Plan'
+        working-directory: mod1 
+        run: | 
+          terraform plan
+      - name: 'Terraform apply'
+        working-directory: mod1 
+        run: | 
+          terraform apply --auto-approve -input=false 
+      - name: 'Terraform destory'
+        working-directory: mod1 
+        run: | 
+          terraform destroy --auto-approve -input=false    
+          
+          
+          
+       
+        
